@@ -14,58 +14,69 @@ export function AboutSection() {
   const timelineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (sectionRef.current) {
-      gsap.fromTo(
-        imageRef.current,
-        { opacity: 0, scale: 0.8 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: imageRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-
-      gsap.fromTo(
-        textRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: textRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-
-      const items = Array.from(timelineRef.current?.children || [])
-      gsap.fromTo(
-        items,
-        { opacity: 0, x: -50 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-          stagger: 0.2,
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-    }
+    const ctx = gsap.context(() => {
+      if (imageRef.current) {
+        gsap.fromTo(
+          imageRef.current,
+          { opacity: 0, scale: 0.9 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.6, // faster
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: imageRef.current,
+              start: 'top 98%', // earlier trigger
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+  
+      if (textRef.current) {
+        gsap.fromTo(
+          textRef.current,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: textRef.current,
+              start: 'top 98%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+  
+      if (timelineRef.current) {
+        const items = Array.from(timelineRef.current.children || [])
+        gsap.fromTo(
+          items,
+          { opacity: 0, x: -30 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: timelineRef.current,
+              start: 'top 98%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+  
+      ScrollTrigger.refresh()
+    }, sectionRef)
+  
+    return () => ctx.revert()
   }, [])
+  
 
   return (
     <section

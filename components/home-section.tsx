@@ -12,7 +12,7 @@ export function HomeSection() {
   const laptopRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 3.5 })
+    const tl = gsap.timeline({ delay: 2.5 })
 
     if (headlineRef.current)
       tl.fromTo(headlineRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 })
@@ -84,11 +84,28 @@ export function HomeSection() {
           View My Work
           <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
         </Button>
+
+        {/* Animated Laptop SVG */}
+        <div className="mt-12">
+          <svg
+            ref={laptopRef}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            width="200"
+            height="200"
+            fill="none"
+            className="mx-auto"
+          >
+            <rect x="32" y="96" width="448" height="288" rx="24" fill="#4F46E5" />
+            <rect x="64" y="128" width="384" height="224" rx="16" fill="#1E1B4B" />
+            <circle cx="180" cy="180" r="24" fill="#FACC15" />
+            <rect x="220" y="160" width="120" height="20" rx="4" fill="#F9FAFB" />
+            <rect x="220" y="190" width="120" height="20" rx="4" fill="#F9FAFB" />
+            <rect x="220" y="220" width="80" height="20" rx="4" fill="#F9FAFB" />
+            <path d="M 0 400 H 512 L 448 440 H 64 L 0 400 Z" fill="#334155" />
+          </svg>
+        </div>
       </div>
-      {/* Animated 
-      
-      Laptop SVG */}
-      
     </section>
-  );
+  )
 }

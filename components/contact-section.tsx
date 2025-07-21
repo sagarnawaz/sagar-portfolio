@@ -1,11 +1,10 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { LinkedinIcon, GithubIcon,  Mail } from "lucide-react"
+import { LinkedinIcon, GithubIcon, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,27 +17,28 @@ export function ContactSection() {
   const successMessageRef = useRef<HTMLDivElement>(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
- useEffect(() => {
-  if (sectionRef.current && typeof window !== "undefined" && window.gsap) {
-    gsap.fromTo(
-      Array.from(formRef.current?.children || []),
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    )
-  }
-}, [])
+  useEffect(() => {
+    if (formRef.current) {
+      const elements = Array.from(formRef.current.children)
 
+      gsap.fromTo(
+        elements,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: formRef.current || sectionRef.current,
+            start: "top 85%", // ✅ triggers sooner on mobile
+            toggleActions: "play none none reverse",
+          },
+        }
+      )
+    }
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,39 +49,30 @@ export function ContactSection() {
 
     console.log("Contact Form Submission:", { name, email, message })
 
-    // Simulate mailto: link or API call
     const mailtoLink = `mailto:sagar.nawaz@example.com?subject=Portfolio Inquiry from ${name}&body=${message}%0A%0AFrom: ${email}`
     window.open(mailtoLink, "_blank")
 
     setShowSuccess(true)
-    if (successMessageRef.current && typeof window !== "undefined" && window.gsap) {
+
+    if (successMessageRef.current) {
       gsap.fromTo(
         successMessageRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
       )
     }
 
-    // Clear form fields
-    if (formRef.current) {
-      formRef.current.reset()
-    }
+    formRef.current?.reset()
 
-    setTimeout(() => {
-      setShowSuccess(false)
-    }, 5000) // Hide success message after 5 seconds
+    setTimeout(() => setShowSuccess(false), 5000)
   }
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (typeof window !== "undefined" && window.gsap) {
-      gsap.to(e.target, { scale: 1.01, borderColor: "#3B82F6", duration: 0.2, ease: "power1.out" })
-    }
+    gsap.to(e.target, { scale: 1.01, borderColor: "#3B82F6", duration: 0.2 })
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (typeof window !== "undefined" && window.gsap) {
-      gsap.to(e.target, { scale: 1, borderColor: "var(--border)", duration: 0.2, ease: "power1.out" })
-    }
+    gsap.to(e.target, { scale: 1, borderColor: "var(--border)", duration: 0.2 })
   }
 
   return (
@@ -101,7 +92,6 @@ export function ContactSection() {
               href="https://www.linkedin.com/in/sagar-nawaz-12081223a"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="LinkedIn Profile"
               className="text-accent-neon-blue hover:text-accent-purple transition-colors duration-300"
             >
               <LinkedinIcon className="h-8 w-8" />
@@ -110,15 +100,12 @@ export function ContactSection() {
               href="https://github.com/sagarnawaz"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub Profile"
               className="text-accent-neon-blue hover:text-accent-purple transition-colors duration-300"
             >
-              <GithubIcon  className="h-8 w-8" />
+              <GithubIcon className="h-8 w-8" />
             </a>
-          
             <a
               href="mailto:sagarnawaz44@gmail.com"
-              aria-label="Email Sagar Nawaz"
               className="text-accent-neon-blue hover:text-accent-purple transition-colors duration-300"
             >
               <Mail className="h-8 w-8" />
@@ -136,7 +123,7 @@ export function ContactSection() {
                 name="name"
                 placeholder="Your Name"
                 required
-                className="bg-input border-border focus:border-accent-neon-blue transition-colors duration-200"
+                className="bg-input border-border"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
@@ -151,7 +138,7 @@ export function ContactSection() {
                 name="email"
                 placeholder="your.email@example.com"
                 required
-                className="bg-input border-border focus:border-accent-neon-blue transition-colors duration-200"
+                className="bg-input border-border"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
@@ -163,17 +150,17 @@ export function ContactSection() {
               <Textarea
                 id="message"
                 name="message"
-                placeholder="Your message here..."
                 rows={5}
+                placeholder="Your message here..."
                 required
-                className="bg-input border-border focus:border-accent-neon-blue transition-colors duration-200"
+                className="bg-input border-border"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-accent-purple hover:bg-accent-purple/80 text-white text-lg py-3 rounded-lg shadow-md transition-all duration-300"
+              className="w-full bg-accent-purple hover:bg-accent-purple/80 text-white text-lg py-3 rounded-lg shadow-md"
             >
               Send Message
             </Button>

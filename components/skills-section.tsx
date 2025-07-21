@@ -44,15 +44,15 @@ export function SkillsSection() {
         if (skillCard) {
           gsap.fromTo(
             skillCard,
-            { opacity: 0, y: 50 },
+            { opacity: 0, y: 30 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.8,
-              ease: "power3.out",
+              duration: 0.5, // faster animation
+              ease: "power2.out",
               scrollTrigger: {
                 trigger: skillCard,
-                start: "top 85%",
+                start: "top 95%", // show earlier
                 toggleActions: "play none none reverse",
               },
             }
@@ -65,11 +65,11 @@ export function SkillsSection() {
               { width: "0%" },
               {
                 width: `${skills[index].proficiency}%`,
-                duration: 1.5,
+                duration: 1,
                 ease: "power2.out",
                 scrollTrigger: {
                   trigger: skillCard,
-                  start: "top 85%",
+                  start: "top 95%",
                   toggleActions: "play none none reverse",
                 },
               }
@@ -81,23 +81,19 @@ export function SkillsSection() {
   }, [])
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (typeof window !== "undefined" && window.gsap) {
-      gsap.to(e.currentTarget.querySelector("svg"), {
-        rotation: 360,
-        duration: 0.5,
-        ease: "power2.out",
-      })
-    }
+    gsap.to(e.currentTarget.querySelector("svg"), {
+      rotation: 360,
+      duration: 0.5,
+      ease: "power2.out",
+    })
   }
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (typeof window !== "undefined" && window.gsap) {
-      gsap.to(e.currentTarget.querySelector("svg"), {
-        rotation: 0,
-        duration: 0.5,
-        ease: "power2.out",
-      })
-    }
+    gsap.to(e.currentTarget.querySelector("svg"), {
+      rotation: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    })
   }
 
   return (

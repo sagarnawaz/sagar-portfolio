@@ -44,14 +44,14 @@ const projects = [
   },
   {
     id: 3,
-    title: "Portfolio Website V2",
+    title: "Personal Blogging Website",
     description:
-      "My personal portfolio website, showcasing my skills and projects with dynamic animations and a clean design.",
+      "My personal blogging website, showcasing my skills and projects with dynamic animations and a clean design.",
     technologies: ["Next.js", "React", "Tailwind CSS", "GSAP"],
     category: "Frontend",
-    github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
+    github: "https://github.com/sagarnawaz/blogging-app",
+    live: "https://blogging-app-weld-iota.vercel.app/",
+    image: "/blogging.png?height=400&width=600",
   },
   {
     id: 4,
@@ -98,28 +98,58 @@ export function ProjectsSection() {
   );
 
   useEffect(() => {
-    if (sectionRef.current && typeof window !== "undefined" && window.gsap) {
-      cardRefs.current.forEach((card) => {
-        if (card) {
-          gsap.fromTo(
-            card,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
+    if (typeof window !== "undefined" && sectionRef.current) {
+      const mm = gsap.matchMedia();
+  
+      mm.add("(max-width: 768px)", () => {
+        cardRefs.current.forEach((card) => {
+          if (card) {
+            gsap.fromTo(
+              card,
+              { opacity: 0, y: 30 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.4,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 90%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          }
+        });
       });
+  
+      mm.add("(min-width: 769px)", () => {
+        cardRefs.current.forEach((card, index) => {
+          if (card) {
+            gsap.fromTo(
+              card,
+              { opacity: 0, y: 50 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: index * 0.05, // slight stagger
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          }
+        });
+      });
+  
+      return () => mm.revert(); // cleanup
     }
-  }, [filter]); // Re-run animation when filter changes
+  }, [filter]);
+  
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (typeof window !== "undefined" && window.gsap) {
