@@ -16,16 +16,16 @@ export default function Page() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 3000) // Loader displays for 3 seconds
+    }, 3000)
     return () => clearTimeout(timer)
   }, [])
 
   return (
     <>
       {loading && <Loader />}
-      <div className={`min-h-screen bg-background text-foreground ${loading ? "hidden" : ""}`}>
+      <div className={`min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden ${loading ? "hidden" : ""}`}>
         <Navbar />
-        <main className="relative z-10">
+        <main className="flex-grow relative z-10">
           <HomeSection />
           <AboutSection />
           <SkillsSection />

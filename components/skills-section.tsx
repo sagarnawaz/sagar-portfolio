@@ -17,20 +17,21 @@ import {
   Type,
 } from "lucide-react"
 
+
 gsap.registerPlugin(ScrollTrigger)
 
 const skills = [
-  { name: "HTML5", icon: Html5, proficiency: 95 },
-  { name: "CSS3", icon: Css3, proficiency: 90 },
-  { name: "JavaScript", icon: Javascript, proficiency: 90 },
-  { name: "React.js", icon: React, proficiency: 85 },
-  { name: "React Native", icon: Smartphone, proficiency: 75 },
+  { name: "HTML5", icon: Html5, proficiency: 90 },
+  { name: "CSS3", icon: Css3, proficiency: 80 },
+  { name: "JavaScript", icon: Javascript, proficiency: 80 },
+  { name: "React.js", icon: React, proficiency: 75 },
+  { name: "React Native", icon: Smartphone, proficiency: 65 },
   { name: "Next.js", icon: Nextjs, proficiency: 80 },
-  { name: "TypeScript", icon: Type, proficiency: 80 },
-  { name: "Tailwind CSS", icon: Tailwind, proficiency: 90 },
+  { name: "TypeScript", icon: Type, proficiency: 60 },
+  { name: "Tailwind CSS", icon: Tailwind, proficiency: 80 },
   { name: "Git", icon: GitBranch, proficiency: 80 },
-  { name: "UI/UX Design", icon: Figma, proficiency: 75 },
-  { name: "AI Concepts", icon: Brain, proficiency: 70 },
+  { name: "UI/UX Design", icon: Figma, proficiency: 60 },
+  { name: "AI Concepts", icon: Brain, proficiency: 60 },
 ]
 
 export function SkillsSection() {

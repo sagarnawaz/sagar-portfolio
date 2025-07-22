@@ -43,7 +43,7 @@ export function Navbar() {
     <header ref={navRef} className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm shadow-md">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="text-2xl font-bold text-accent-neon-blue">
-          Sagar<span className="text-foreground">Nawaz</span>
+        &lt;Sagar<span className="text-foreground">Nawaz&gt;</span>
         </div>
 
         {/* Desktop Navigation */}

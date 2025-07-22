@@ -10,55 +10,27 @@ export function HomeSection() {
   const taglineRef = useRef<HTMLParagraphElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const laptopRef = useRef<SVGSVGElement>(null)
-  const roleSpanRef = useRef<HTMLSpanElement>(null) // Ref for the "Frontend Developer" span
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0.5 }) // Reduced initial delay for quicker start
+    const tl = gsap.timeline({ delay: 2.5 })
 
-    // Animate the entire h1 to appear first
-    if (headlineRef.current) {
+    if (headlineRef.current)
       tl.fromTo(headlineRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 })
-    }
 
-    // Typewriter effect for "Frontend Developer"
-    if (roleSpanRef.current) {
-      const fullText = "Frontend Developer"
-      // Set initial state for the typewriter span: hidden, no width, nowrap
-      gsap.set(roleSpanRef.current, {
-        opacity: 0,
-        width: 0,
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        display: "inline-block", // Essential for width animation
-      })
-
-      // Animate the text reveal using GSAP's width animation with steps easing
-      tl.to(
-        roleSpanRef.current,
-        {
-          opacity: 1,
-          width: "auto", // Animate width to reveal text
-          duration: 1.5, // Duration for typing
-          ease: `steps(${fullText.length})`, // Use steps easing for character-by-character effect
-        },
-        "-=0.5", // Start 0.5s before the previous animation (h1 fade-in) ends
-      )
-    }
-
-    // Subsequent animations for tagline, button, and laptop
     if (taglineRef.current)
       tl.fromTo(taglineRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }, "-=0.5")
+
     if (buttonRef.current)
       tl.fromTo(buttonRef.current, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.8 }, "-=0.5")
+
     if (laptopRef.current)
       tl.fromTo(
         laptopRef.current,
         { opacity: 0, y: 100, rotationY: 90 },
         { opacity: 1, y: 0, rotationY: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" },
-        "-=0.8",
+        "-=0.8"
       )
 
-    // Continuous rotation for laptop (from original code)
     if (laptopRef.current) {
       gsap.to(laptopRef.current, {
         rotationY: 360,
@@ -76,30 +48,27 @@ export function HomeSection() {
       projectsSection.scrollIntoView({ behavior: "smooth" })
     }
   }
+
   const handleHover = (scale: number) => {
     if (buttonRef.current) {
       gsap.to(buttonRef.current, { scale, duration: 0.3 })
     }
   }
+
   return (
     <section
       id="home"
       ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 py-20 overflow-hidden
-                 bg-gradient-to-br from-primary-dark-navy to-accent-purple dark:from-primary-dark-navy dark:to-accent-purple
-                 before:content-[''] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] before:from-transparent before:via-accent-neon-blue/10 before:to-transparent before:animate-pulse-subtle"
+               bg-gradient-to-br from-primary-dark-navy to-accent-purple dark:from-primary-dark-navy dark:to-accent-purple
+               before:content-[''] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] before:from-transparent before:via-accent-neon-blue/10 before:to-transparent before:animate-pulse-subtle"
     >
       <div className="relative z-10 max-w-4xl mx-auto">
         <h1
           ref={headlineRef}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4 drop-shadow-lg"
         >
-          Sagar Nawaz -{" "}
-          <span ref={roleSpanRef} className="text-blue-400">
-            {" "}
-            {/* Changed color here */}
-            Frontend Developer
-          </span>
+          Sagar Nawaz - <span className="text-accent-neon-blue">Frontend Developer</span>
         </h1>
         <p ref={taglineRef} className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
           Crafting Modern Web Experiences with <span className="font-semibold text-accent-neon-blue">AI Flair</span>
@@ -115,6 +84,7 @@ export function HomeSection() {
           View My Work
           <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
         </Button>
+
         {/* Animated Laptop SVG */}
         <div className="mt-12">
           <svg
