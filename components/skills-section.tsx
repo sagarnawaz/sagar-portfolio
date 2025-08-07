@@ -40,7 +40,7 @@ export function SkillsSection() {
   const progressBarRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
-    if (sectionRef.current && typeof window !== "undefined" && window.gsap) {
+    if (sectionRef.current && typeof window !== "undefined") {
       skillRefs.current.forEach((skillCard, index) => {
         if (skillCard) {
           gsap.fromTo(
@@ -50,10 +50,11 @@ export function SkillsSection() {
               opacity: 1,
               y: 0,
               duration: 0.5, // faster animation
+              delay: index * 0.15, // staggered delay for each card
               ease: "power2.out",
               scrollTrigger: {
                 trigger: skillCard,
-                start: "top 95%", // show earlier
+                start: "top 95%", // show earlier (unchanged, but ensure consistency)
                 toggleActions: "play none none reverse",
               },
             }

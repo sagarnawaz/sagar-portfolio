@@ -20,27 +20,27 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-  {
-    id: 1,
-    title: "AI Chatbot Interface",
-    description:
-      "A responsive and intuitive chat interface powered by a custom AI model, featuring real-time responses and user authentication.",
-    technologies: ["Next.js", "React", "Tailwind CSS", "AI SDK"],
-    category: "AI",
-    github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
-  },
+  // {
+  //   id: 1,
+  //   title: "AI Chatbot Interface",
+  //   description:
+  //     "A responsive and intuitive chat interface powered by a custom AI model, featuring real-time responses and user authentication.",
+  //   technologies: ["Next.js", "React", "Tailwind CSS", "AI SDK"],
+  //   category: "AI",
+  //   github: "#",
+  //   live: "#",
+  //   image: "/placeholder.svg?height=400&width=600",
+  // },
   {
     id: 2,
-    title: "E-commerce Dashboard",
+    title: "E-commerce",
     description:
-      "A modern e-commerce admin dashboard with data visualization, product management, and order tracking features.",
-    technologies: ["Next.js", "React", "Tailwind CSS", "Chart.js"],
+      "A modern e-commerce UI with data visualization, product management, and order tracking features.",
+    technologies: ["Next.js", "React", "Tailwind CSS"],
     category: "Frontend",
     github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
+    live: "https://nike-app-green.vercel.app/",
+    image: "/ecomerce.png?height=400&width=600",
   },
   {
     id: 3,
@@ -53,38 +53,38 @@ const projects = [
     live: "https://blogging-app-weld-iota.vercel.app/",
     image: "/blogging.png?height=400&width=600",
   },
-  {
-    id: 4,
-    title: "Image Recognition App",
-    description:
-      "An application that uses machine learning to identify objects in images, built with a user-friendly frontend.",
-    technologies: ["React", "Python (Flask)", "TensorFlow.js"],
-    category: "AI",
-    github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
-  },
+  // {
+  //   id: 4,
+  //   title: "Image Recognition App",
+  //   description:
+  //     "An application that uses machine learning to identify objects in images, built with a user-friendly frontend.",
+  //   technologies: ["React", "Python (Flask)", "TensorFlow.js"],
+  //   category: "AI",
+  //   github: "#",
+  //   live: "#",
+  //   image: "/placeholder.svg?height=400&width=600",
+  // },
   {
     id: 5,
-    title: "Task Management System",
+    title: "Movie Web App ",
     description:
-      "A full-stack task management system with drag-and-drop functionality and real-time updates.",
-    technologies: ["Next.js", "React", "Node.js", "MongoDB"],
+      "A movie web using API with analyzing trending feature, providing filter and search (deboounce) to user.",
+    technologies: ["React", "Next.js", "Tailwind CSS", "Appwrite"],
     category: "Frontend",
     github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
+    live: "https://movie-web-five-alpha.vercel.app/",
+    image: "/movie.png?height=400&width=600",
   },
   {
     id: 6,
-    title: "Sentiment Analysis Tool",
+    title: "Travel Agent UI",
     description:
-      "A web-based tool for analyzing text sentiment, providing insights into customer feedback and social media data.",
-    technologies: ["React", "Python (Django)", "NLTK"],
-    category: "AI",
+      "A Travel agency UI. It SPA functionality and real-time updates.",
+    technologies: ["Next.js", "React", "Tailwind CSS"],
+    category: "Frontend",
     github: "#",
-    live: "#",
-    image: "/placeholder.svg?height=400&width=600",
+    live: "https://travel-ui-eight.vercel.app/",
+    image: "/travel.png?height=400&width=600",
   },
 ];
 
@@ -98,57 +98,25 @@ export function ProjectsSection() {
   );
 
   useEffect(() => {
-    if (typeof window !== "undefined" && sectionRef.current) {
-      const mm = gsap.matchMedia();
-  
-      mm.add("(max-width: 768px)", () => {
-        cardRefs.current.forEach((card) => {
-          if (card) {
-            gsap.fromTo(
-              card,
-              { opacity: 0, y: 30 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.4,
-                ease: "power2.out",
-                scrollTrigger: {
-                  trigger: card,
-                  start: "top 90%",
-                  toggleActions: "play none none reverse",
-                },
-              }
-            );
-          }
-        });
-      });
-  
-      mm.add("(min-width: 769px)", () => {
-        cardRefs.current.forEach((card, index) => {
-          if (card) {
-            gsap.fromTo(
-              card,
-              { opacity: 0, y: 50 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                delay: index * 0.05, // slight stagger
-                ease: "power2.out",
-                scrollTrigger: {
-                  trigger: card,
-                  start: "top 85%",
-                  toggleActions: "play none none reverse",
-                },
-              }
-            );
-          }
-        });
-      });
-  
-      return () => mm.revert(); // cleanup
+    if (sectionRef.current) {
+      gsap.fromTo(
+        cardRefs.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 95%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     }
-  }, [filter]);
+  }, [filteredProjects]);
   
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -185,9 +153,9 @@ export function ProjectsSection() {
         <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
           My <span className="text-accent-neon-blue">Projects</span>
         </h2>
-
+{/* AI fiter in map*/}
         <div className="flex justify-center space-x-4 mb-12">
-          {["All", "Frontend", "AI"].map((cat) => (
+          {["All", "Frontend"].map((cat) => (
             <Button
               key={cat}
               variant={filter === cat ? "default" : "outline"}

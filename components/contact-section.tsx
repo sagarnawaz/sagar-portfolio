@@ -32,7 +32,7 @@ export function ContactSection() {
           stagger: 0.1,
           scrollTrigger: {
             trigger: formRef.current || sectionRef.current,
-            start: "top 85%", // ✅ triggers sooner on mobile
+            start: "top 95%", // triggers reliably on all devices
             toggleActions: "play none none reverse",
           },
         }

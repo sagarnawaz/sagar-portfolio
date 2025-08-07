@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 export function HomeSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -10,35 +11,74 @@ export function HomeSection() {
   const taglineRef = useRef<HTMLParagraphElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const laptopRef = useRef<SVGSVGElement>(null)
+  const laptopContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 2.5 })
+    if (typeof window !== "undefined") {
+      gsap.registerPlugin(ScrollTrigger)
 
-    if (headlineRef.current)
-      tl.fromTo(headlineRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 })
-
-    if (taglineRef.current)
-      tl.fromTo(taglineRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }, "-=0.5")
-
-    if (buttonRef.current)
-      tl.fromTo(buttonRef.current, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.8 }, "-=0.5")
-
-    if (laptopRef.current)
-      tl.fromTo(
+      const elements = [
+        headlineRef.current,
+        taglineRef.current,
+        buttonRef.current,
         laptopRef.current,
-        { opacity: 0, y: 100, rotationY: 90 },
-        { opacity: 1, y: 0, rotationY: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" },
-        "-=0.8"
+      ].filter(Boolean)
+
+      // Scroll in animation
+      gsap.fromTo(
+        elements,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
       )
 
-    if (laptopRef.current) {
+      // Floating animation
       gsap.to(laptopRef.current, {
-        rotationY: 360,
+        y: -15,
+        duration: 2,
+        ease: "power1.inOut",
         repeat: -1,
-        ease: "none",
-        duration: 20,
-        transformOrigin: "center center",
+        yoyo: true,
       })
+
+      // Hover rotation
+      if (laptopContainerRef.current) {
+        const container = laptopContainerRef.current
+
+        const handleMouseEnter = () => {
+          gsap.to(laptopRef.current, {
+            rotate: 10,
+            duration: 0.5,
+            ease: "power2.out",
+          })
+        }
+
+        const handleMouseLeave = () => {
+          gsap.to(laptopRef.current, {
+            rotate: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          })
+        }
+
+        container.addEventListener("mouseenter", handleMouseEnter)
+        container.addEventListener("mouseleave", handleMouseLeave)
+
+        return () => {
+          container.removeEventListener("mouseenter", handleMouseEnter)
+          container.removeEventListener("mouseleave", handleMouseLeave)
+        }
+      }
     }
   }, [])
 
@@ -70,7 +110,10 @@ export function HomeSection() {
         >
           Sagar Nawaz - <span className="text-accent-neon-blue">Frontend Developer</span>
         </h1>
-        <p ref={taglineRef} className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
+        <p
+          ref={taglineRef}
+          className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto"
+        >
           Crafting Modern Web Experiences with <span className="font-semibold text-accent-neon-blue">AI Flair</span>
         </p>
         <Button
@@ -85,8 +128,8 @@ export function HomeSection() {
           <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
         </Button>
 
-        {/* Animated Laptop SVG */}
-        <div className="mt-12">
+        {/* Floating + Hover-Rotate Laptop SVG */}
+        <div ref={laptopContainerRef} className="mt-12 cursor-pointer">
           <svg
             ref={laptopRef}
             xmlns="http://www.w3.org/2000/svg"

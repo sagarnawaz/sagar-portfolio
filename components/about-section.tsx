@@ -15,57 +15,25 @@ export function AboutSection() {
 
   useEffect(() => {
     if (sectionRef.current) {
+      const items = [imageRef.current, textRef.current, ...Array.from(timelineRef.current?.children || [])].filter(Boolean);
       gsap.fromTo(
-        imageRef.current,
-        { opacity: 0, scale: 0.8 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: imageRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-
-      gsap.fromTo(
-        textRef.current,
-        { opacity: 0, y: 50 },
+        items,
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: textRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-
-      const items = Array.from(timelineRef.current?.children || [])
-      gsap.fromTo(
-        items,
-        { opacity: 0, x: -50 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power2.out',
+          duration: 0.5,
           stagger: 0.2,
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: timelineRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
+            trigger: sectionRef.current,
+            start: "top 95%",
+            toggleActions: "play none none reverse",
           },
         }
-      )
+      );
     }
-  }, [])
+  }, []);
 
   return (
     <section

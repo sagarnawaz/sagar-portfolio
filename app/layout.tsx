@@ -3,6 +3,7 @@ import "./globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Script from "next/script"
+import { CustomCursor } from "@/components/custom-cursor"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,11 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* GSAP CDN */}
-        <Script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js" strategy="beforeInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js" strategy="beforeInteractive" />
+        {/* GSAP CDN removed to use npm imports only */}
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning={true}>
+        <CustomCursor />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
         </ThemeProvider>

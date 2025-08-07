@@ -8,7 +8,7 @@ export function Loader() {
   const textRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (loaderRef.current && textRef.current && typeof window !== "undefined" && window.gsap) {
+    if (loaderRef.current && textRef.current && typeof window !== "undefined") {
       gsap.to(loaderRef.current, {
         opacity: 0,
         duration: 1,
