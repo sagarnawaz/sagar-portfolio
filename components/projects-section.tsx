@@ -20,17 +20,17 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-  // {
-  //   id: 1,
-  //   title: "AI Chatbot Interface",
-  //   description:
-  //     "A responsive and intuitive chat interface powered by a custom AI model, featuring real-time responses and user authentication.",
-  //   technologies: ["Next.js", "React", "Tailwind CSS", "AI SDK"],
-  //   category: "AI",
-  //   github: "#",
-  //   live: "#",
-  //   image: "/placeholder.svg?height=400&width=600",
-  // },
+  {
+    id: 1,
+    title: "LMS Admin ",
+    description:
+      "The LMS admin dashboard is a Next.js-based web application designed for admins and instructors to manage educational content.",
+    technologies: ["Next.js", "React", "Tailwind CSS", "Supabase"],
+    category: "Frontend",
+    github: "https://github.com/sagarnawaz/lms-admin",
+    live: "https://lms-admin-bay.vercel.app/",
+    image: "/lms.png?height=400&width=600",
+  },
   {
     id: 2,
     title: "E-commerce",
