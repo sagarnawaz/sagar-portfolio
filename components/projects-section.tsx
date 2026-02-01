@@ -147,22 +147,22 @@ export function ProjectsSection() {
     <section
       id="projects"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-gradient-to-br from-background to-gray-50 dark:from-gray-950 dark:to-primary-dark-navy/20"
+      className="py-24 md:py-32 relative z-10"
     >
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
-          My <span className="text-accent-neon-blue">Projects</span>
+      <div className="container mx-auto px-6 md:px-12">
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-foreground tracking-tighter">
+          Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Works</span>
         </h2>
 {/* AI fiter in map*/}
-        <div className="flex justify-center space-x-4 mb-12">
+        <div className="flex justify-center space-x-4 mb-16">
           {["All", "Frontend"].map((cat) => (
             <Button
               key={cat}
               variant={filter === cat ? "default" : "outline"}
               className={
                 filter === cat
-                  ? "bg-accent-purple hover:bg-accent-purple/80 text-white"
-                  : "border-accent-neon-blue text-accent-neon-blue hover:bg-accent-neon-blue/10"
+                  ? "bg-cyan-500 hover:bg-cyan-600 text-black border-none"
+                  : "border-black/10 dark:border-white/10 text-muted-foreground hover:text-black dark:hover:text-white hover:border-cyan-500/50 hover:bg-cyan-500/10"
               }
               onClick={() => setFilter(cat)}
             >
@@ -176,24 +176,25 @@ export function ProjectsSection() {
             <Card
               key={project.id}
               ref={(el) => { cardRefs.current[index] = el }}
-              className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 opacity-0"
+              className="overflow-hidden bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-cyan-500/30 transition-all duration-500 group"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               <div className="relative w-full h-48 overflow-hidden">
+                <div className="absolute inset-0 bg-cyan-500/10 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <Image
                   src={project.image || "/placeholder.svg"}
                   alt={project.title}
                   fill
                   style={{ objectFit: "cover" }}
-                  className="transition-transform duration-300 hover:scale-105"
+                  className="transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
               <CardHeader>
-                <CardTitle className="text-foreground">
+                <CardTitle className="text-foreground text-xl group-hover:text-cyan-400 transition-colors">
                   {project.title}
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   {project.description}
                 </CardDescription>
               </CardHeader>
@@ -202,7 +203,7 @@ export function ProjectsSection() {
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-sm rounded-full bg-accent-neon-blue/10 text-accent-neon-blue font-medium"
+                      className="px-3 py-1 text-xs rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-muted-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-300 group-hover:border-cyan-500/20 transition-colors"
                     >
                       {tech}
                     </span>
@@ -212,8 +213,8 @@ export function ProjectsSection() {
               <CardFooter className="flex justify-end space-x-4">
                 <Button
                   asChild
-                  variant="outline"
-                  className="border-accent-purple text-accent-purple hover:bg-accent-purple/10 bg-transparent"
+                  variant="ghost"
+                  className="hover:bg-black/5 dark:hover:bg-white/5 hover:text-cyan-400"
                 >
                   <a
                     href={project.github}
@@ -226,7 +227,7 @@ export function ProjectsSection() {
                 </Button>
                 <Button
                   asChild
-                  className="bg-accent-purple hover:bg-accent-purple/80 text-white"
+                  className="bg-black/5 dark:bg-white/10 hover:bg-cyan-500 hover:text-black dark:hover:text-black text-black dark:text-white border border-black/5 dark:border-white/10 transition-all duration-300"
                 >
                   <a
                     href={project.live}

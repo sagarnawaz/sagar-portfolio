@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Loader() {
+export function Loader() {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

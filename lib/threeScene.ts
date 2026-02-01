@@ -1,214 +1,186 @@
-import * as THREE from 'three';
-import gsap from 'gsap';
+import * as THREE from "three";
 
 export const initThreeScene = (canvas: HTMLCanvasElement) => {
-    // --- SCENE SETUP ---
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050505, 0.002); // Depth fog
+  const scene = new THREE.Scene();
+  // Transparent background
+  scene.background = null;
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.z = 30;
 
-    const renderer = new THREE.WebGLRenderer({
-        canvas: canvas,
-        antialias: true,
-        alpha: true
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: true,
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
+  // --- Particles ---
+  const particleCount = 4000;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const originalPositions = new Float32Array(particleCount * 3);
+  const targetPositions = new Float32Array(particleCount * 3);
+  const colors = new Float32Array(particleCount * 3);
 
-    const pointLight = new THREE.PointLight(0x00f3ff, 1);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
+  const color1 = new THREE.Color("#4F46E5"); // Indigo
+  const color2 = new THREE.Color("#8B5CF6"); // Purple
+  const color3 = new THREE.Color("#06b6d4"); // Cyan
 
-    const pointLight2 = new THREE.PointLight(0xff0055, 1);
-    pointLight2.position.set(-5, -5, 5);
-    scene.add(pointLight2);
+  // Initial Shape: Random extraction from a sphere
+  for (let i = 0; i < particleCount; i++) {
+    const r = 20 * Math.cbrt(Math.random());
+    const theta = Math.random() * 2 * Math.PI;
+    const phi = Math.acos(2 * Math.random() - 1);
 
-    // --- MORPHING PARTICLE SYSTEM ---
-    const particleCount = 2000;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
+    const x = r * Math.sin(phi) * Math.cos(theta);
+    const y = r * Math.sin(phi) * Math.sin(theta);
+    const z = r * Math.cos(phi);
 
-    const color1 = new THREE.Color(0x00f3ff); // Cyan
-    const color2 = new THREE.Color(0xff0055); // Pink
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
 
-    // Points generation functions
-    const getSpherePoints = () => {
-        const vectors = [];
-        const r = 2;
-        for (let i = 0; i < particleCount; i++) {
-            const phi = Math.acos(-1 + (2 * i) / particleCount);
-            const theta = Math.sqrt(particleCount * Math.PI) * phi;
-            vectors.push(new THREE.Vector3(
-                r * Math.cos(theta) * Math.sin(phi),
-                r * Math.sin(theta) * Math.sin(phi),
-                r * Math.cos(phi)
-            ));
-        }
-        return vectors;
-    };
+    originalPositions[i * 3] = x;
+    originalPositions[i * 3 + 1] = y;
+    originalPositions[i * 3 + 2] = z;
 
-    const getTorusPoints = () => {
-        const vectors = [];
-        const R = 2.5; // Major radius
-        const r = 0.8; // Minor radius
-        for (let i = 0; i < particleCount; i++) {
-            const u = (i / particleCount) * Math.PI * 2;
-            const v = (i / particleCount) * Math.PI * 2;
-            const twist = u * 0.5;
-            
-            vectors.push(new THREE.Vector3(
-                (R + r * Math.cos(v + twist)) * Math.cos(u),
-                (R + r * Math.cos(v + twist)) * Math.sin(u),
-                r * Math.sin(v)
-            ));
-        }
-        return vectors;
-    };
+    // Target: Torus or Wave
+    targetPositions[i * 3] = x * 1.5;
+    targetPositions[i * 3 + 1] = y * 1.5;
+    targetPositions[i * 3 + 2] = z * 1.5;
 
-    const getPlanePoints = () => {
-        const vectors = [];
-        const size = 6;
-        for (let i = 0; i < particleCount; i++) {
-            const x = (Math.random() - 0.5) * size;
-            const z = (Math.random() - 0.5) * size;
-            const y = (Math.random() - 0.5) * 0.5;
-            vectors.push(new THREE.Vector3(x, y - 2, z));
-        }
-        return vectors;
-    };
+    // Colors
+    const mixedColor = color1.clone().lerp(color2, Math.random()).lerp(color3, Math.random());
+    colors[i * 3] = mixedColor.r;
+    colors[i * 3 + 1] = mixedColor.g;
+    colors[i * 3 + 2] = mixedColor.b;
+  }
 
-    // Initialize as Sphere
-    const spherePoints = getSpherePoints();
-    const torusPoints = getTorusPoints();
-    const planePoints = getPlanePoints();
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  const material = new THREE.PointsMaterial({
+    size: 0.15,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  // --- Mouse Interaction ---
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  const handleMouseMove = (event: MouseEvent) => {
+    mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
+    mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+  };
+  window.addEventListener("mousemove", handleMouseMove);
+
+  // --- Morphing Logic ---
+  let time = 0;
+  
+  // Shapes
+  const getSpherePos = (i: number) => {
+     // Reusing original positions for sphere
+     return {
+        x: originalPositions[i*3],
+        y: originalPositions[i*3+1],
+        z: originalPositions[i*3+2]
+     }
+  }
+  
+  const getWavePos = (i: number, t: number) => {
+     const x = (i % 100 - 50) * 0.8;
+     const z = (Math.floor(i / 100) - 20) * 0.8;
+     const y = Math.sin(x * 0.2 + t) * 5 + Math.cos(z * 0.2 + t) * 5;
+     return {x, y, z};
+  }
+  
+  // --- Animation ---
+  let animationId: number;
+  let shapeState = 0; // 0: Sphere, 1: Wave
+  
+  // Auto-switch shapes
+  setInterval(() => {
+    shapeState = (shapeState + 1) % 2;
+  }, 10000);
+
+  const animate = () => {
+    animationId = requestAnimationFrame(animate);
+    time += 0.005;
+
+    targetX = mouseX * 0.5;
+    targetY = mouseY * 0.5;
+
+    particles.rotation.y += 0.001;
+    particles.rotation.x += (targetY * 0.001 - particles.rotation.x) * 0.05;
+    particles.rotation.y += (targetX * 0.001 - particles.rotation.y) * 0.05;
+
+    const posAttr = particles.geometry.attributes.position;
+    const array = posAttr.array as Float32Array;
 
     for (let i = 0; i < particleCount; i++) {
-        positions[i * 3] = spherePoints[i].x;
-        positions[i * 3 + 1] = spherePoints[i].y;
-        positions[i * 3 + 2] = spherePoints[i].z;
+        let tx, ty, tz;
 
-        colors[i * 3] = color1.r;
-        colors[i * 3 + 1] = color1.g;
-        colors[i * 3 + 2] = color1.b;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const material = new THREE.PointsMaterial({
-        size: 0.05,
-        vertexColors: true,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-        opacity: 0.8
-    });
-
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-
-    // Starfield
-    const starGeo = new THREE.BufferGeometry();
-    const starCount = 2000;
-    const starPos = new Float32Array(starCount * 3);
-    for(let i=0; i<starCount*3; i++) {
-        starPos[i] = (Math.random() - 0.5) * 40;
-    }
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-    const starMat = new THREE.PointsMaterial({color: 0x444444, size: 0.02});
-    const stars = new THREE.Points(starGeo, starMat);
-    scene.add(stars);
-
-    // Mouse Interaction
-    let mouseX = 0;
-    let mouseY = 0;
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
-
-    const onMouseMove = (event: MouseEvent) => {
-        mouseX = (event.clientX - windowHalfX);
-        mouseY = (event.clientY - windowHalfY);
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-
-    // Animation Loop
-    const clock = new THREE.Clock();
-    let animId: number;
-
-    // Globals for external control
-    const state = {
-        activeMorphTarget: 'sphere' as 'sphere' | 'torus' | 'plane'
-    };
-
-    const animate = () => {
-        animId = requestAnimationFrame(animate);
-        const elapsedTime = clock.getElapsedTime();
-
-        const targetX = mouseX * 0.001;
-        const targetY = mouseY * 0.001;
-
-        particles.rotation.y += 0.05 * (targetX - particles.rotation.y);
-        particles.rotation.x += 0.05 * (targetY - particles.rotation.x);
-        particles.rotation.z += 0.002;
-
-        const scale = 1 + Math.sin(elapsedTime * 0.5) * 0.05;
-        particles.scale.set(scale, scale, scale);
-
-        stars.rotation.y -= 0.0005;
-
-        // Morphing Logic
-        const positions = geometry.attributes.position.array as Float32Array;
-        let sourceArray: THREE.Vector3[], targetArray: THREE.Vector3[];
-
-        if (state.activeMorphTarget === 'sphere') { targetArray = spherePoints; } 
-        else if (state.activeMorphTarget === 'torus') { targetArray = torusPoints; } 
-        else if (state.activeMorphTarget === 'plane') { targetArray = planePoints; } 
-        else { targetArray = spherePoints; }
-
-        for(let i=0; i<particleCount; i++) {
-            const idx = i * 3;
-            // Simple lerp for morphing
-            positions[idx] += (targetArray[i].x - positions[idx]) * 0.05;
-            positions[idx+1] += (targetArray[i].y - positions[idx+1]) * 0.05;
-            positions[idx+2] += (targetArray[i].z - positions[idx+2]) * 0.05;
+        if (shapeState === 0) {
+            // Sphere with noise
+            const s = getSpherePos(i);
+            const noise = Math.sin(time * 2 + i) * 0.5;
+            tx = s.x + noise;
+            ty = s.y + noise;
+            tz = s.z + noise;
+        } else {
+             // Wave
+             const w = getWavePos(i, time);
+             tx = w.x;
+             ty = w.y;
+             tz = w.z;
         }
-        geometry.attributes.position.needsUpdate = true;
+        
+        // Lerp current to target
+        array[i * 3] += (tx - array[i * 3]) * 0.03;
+        array[i * 3 + 1] += (ty - array[i * 3 + 1]) * 0.03;
+        array[i * 3 + 2] += (tz - array[i * 3 + 2]) * 0.03;
+    }
+    
+    posAttr.needsUpdate = true;
 
-        renderer.render(scene, camera);
-    };
+    renderer.render(scene, camera);
+  };
 
-    animate();
+  animate();
 
-    // Resize Handler
-    const onResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', onResize);
+  // --- Resize ---
+  const handleResize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  };
+  window.addEventListener("resize", handleResize);
 
-    // cleanup
-    return {
-        dispose: () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('resize', onResize);
-            cancelAnimationFrame(animId);
-            renderer.dispose();
-            geometry.dispose();
-            material.dispose();
-        },
-        camera,
-        particles,
-        pointLight,
-        setMorphTarget: (target: 'sphere' | 'torus' | 'plane') => {
-            state.activeMorphTarget = target;
-        }
-    };
+  return {
+    dispose: () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(animationId);
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+    },
+  };
 };

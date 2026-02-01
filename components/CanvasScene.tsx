@@ -28,5 +28,9 @@ export default function CanvasScene({ onSceneReady }: CanvasSceneProps) {
     };
   }, []);
 
-  return <canvas ref={canvasRef} id="webgl-canvas" className="fixed top-0 left-0 w-full h-full z-[1] outline-none" />;
+  return (
+    <div className="fixed inset-0 -z-50 pointer-events-none">
+       <canvas ref={canvasRef} id="webgl-canvas" className="w-full h-full block" />
+    </div>
+  );
 }
