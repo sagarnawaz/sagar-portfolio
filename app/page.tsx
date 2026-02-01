@@ -1,39 +1,47 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Loader } from "@/components/loader"
-import { Navbar } from "@/components/navbar"
-import { HomeSection } from "@/components/home-section"
-import { AboutSection } from "@/components/about-section"
-import { SkillsSection } from "@/components/skills-section"
-import { ProjectsSection } from "@/components/projects-section"
-import { ContactSection } from "@/components/contact-section"
-import { Footer } from "@/components/footer"
+import { useEffect, useState, useRef } from "react";
+import CanvasScene from "@/components/CanvasScene";
+import Cursor from "@/components/Cursor";
+import Loader from "@/components/Loader";
+import Header from "@/components/Header";
+import NavRail from "@/components/NavRail";
+import Sections from "@/components/Sections";
+import { initScrollAnimations } from "@/lib/animations";
 
-export default function Page() {
-  const [loading, setLoading] = useState(true)
+export default function Home() {
+  const [sceneState, setSceneState] = useState<any>(null);
+  
+  // We use a ref to hold the scene state to avoid re-running effects if state updates trigger re-renders
+  // but useEffect dependency on sceneState is fine.
+  const sceneRef = useRef<any>(null);
+
+  const handleSceneReady = (scene: any) => {
+      sceneRef.current = scene;
+      setSceneState(scene);
+  };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 3000) // Loader displays for 3 seconds
-    return () => clearTimeout(timer)
-  }, [])
+    if (sceneRef.current) {
+        // Init animations only when scene is ready
+        initScrollAnimations(sceneRef);
+    }
+  }, [sceneState]);
 
   return (
     <>
-      {loading && <Loader />}
-      <div className={`min-h-screen bg-background text-foreground ${loading ? "hidden" : ""}`}>
-        <Navbar />
-        <main className="relative z-10">
-          <HomeSection />
-          <AboutSection />
-          <SkillsSection />
-          <ProjectsSection />
-          <ContactSection />
-        </main>
-        <Footer />
+      <Loader />
+      <Cursor />
+      
+      {/* 3D Background */}
+      <CanvasScene onSceneReady={handleSceneReady} />
+
+      <div id="ui-layer" className="fixed top-0 left-0 w-full h-full z-10 pointer-events-none grid grid-rows-[auto_1fr_auto] grid-cols-[1fr_auto]">
+        <Header />
+        <NavRail />
       </div>
+
+      <Sections />
     </>
-  )
+  );
 }
