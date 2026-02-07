@@ -53,18 +53,18 @@ export function HomeSection() {
       <div className="relative z-10 max-w-5xl mx-auto space-y-8">
         <h1
           ref={headlineRef}
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-foreground mix-blend-difference"
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-foreground mix-blend-difference"
         >
           SAGAR NAWAZ
         </h1>
         <p
           ref={taglineRef}
-          className="text-lg sm:text-xl md:text-2xl font-mono text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+          className="text-base sm:text-xl md:text-2xl font-mono text-muted-foreground max-w-3xl mx-auto leading-relaxed"
         >
-          <span className="block mb-4 text-cyan-400 font-bold">Full-Stack Developer | 2 Years Experience</span>
+          <span className="block mb-2 sm:mb-4 text-cyan-400 font-bold">Full-Stack Developer | 2 Years Experience</span>
           Crafting Scalable & Interactive Web Experiences.
           <br/>
-          <span className="text-sm md:text-base opacity-80 mt-2 block">
+          <span className="text-xs md:text-base opacity-80 mt-2 block">
             React • Next.js • Node.js • TypeScript • MongoDB
           </span>
         </p>

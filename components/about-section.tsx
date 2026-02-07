@@ -104,7 +104,7 @@ export function AboutSection({
       className={cn("py-24 md:py-32 bg-background relative z-10 overflow-hidden", className)}
     >
       <div className="container mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             
             {/* Left Column: Text Content */}
             <div className="space-y-10 order-2 lg:order-1">

@@ -18,17 +18,10 @@ interface JourneyItem {
 
 const journeyData: JourneyItem[] = [
     {
-        year: "2026",
+        year: "2025",
         title: "Full-Stack Developer",
         company: "Quickers Venture",
         description: "Building scalable full-stack applications using Next.js, Node.js, and MongoDB. Delivering production-ready solutions for diverse clients.",
-        skills: ["Next.js", "Node.js", "MongoDB", "system Design"]
-    },
-     {
-        year: "2025",
-        title: "Web Dev Internship",
-        company: "Quickers Venture",
-        description: "Entered the professional world. Learned agile workflows, git version control, and foundational frontend architectural patterns.",
         skills: ["JavaScript", "React", "Laravel", "MySql", "Bootstrap"]
     },
     {
@@ -111,7 +104,7 @@ export function ExperienceTimeline() {
 
                 <div className="relative max-w-4xl mx-auto">
                     {/* Vertical Connecting Line (Absolute Center) */}
-                    <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-1 bg-black/5 dark:bg-white/5 -translate-x-1/2 md:-translate-x-1/2 h-full rounded-full">
+                    <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-black/5 dark:bg-white/5 -translate-x-1/2 md:-translate-x-1/2 h-full rounded-full">
                         <div 
                             ref={lineRef}
                             className="w-full h-full origin-top bg-gradient-to-b from-[#00f3ff] via-purple-500 to-[#ff0055] rounded-full shadow-[0_0_15px_rgba(0,243,255,0.6)]"
@@ -138,13 +131,13 @@ function TimelineCard({ item, index }: { item: JourneyItem, index: number }) {
             isEven ? "md:flex-row-reverse" : ""
         )}>
             {/* Timeline Node (Center) */}
-            <div className="absolute left-[0] md:left-1/2 w-8 h-8 -translate-x-[calc(50%-0.5px)] md:-translate-x-1/2 bg-background border-2 border-[#00f3ff] rounded-full z-20 flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.4)]">
+            <div className="absolute left-6 md:left-1/2 w-8 h-8 -translate-x-1/2 md:-translate-x-1/2 bg-background border-2 border-[#00f3ff] rounded-full z-20 flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.4)]">
                  <div className="w-2 h-2 bg-[#00f3ff] rounded-full animate-pulse" />
             </div>
 
             {/* Content Card */}
             <div className={cn(
-                "ml-12 md:ml-0 md:w-1/2 px-4 md:px-12 w-full",
+                "ml-14 md:ml-0 md:w-1/2 px-4 md:px-12 w-full",
                 // isEven ? "md:pr-12 md:text-right" : "md:pl-12 md:text-left" // Actually aligning text left looks better usually, but let's see.
                 // Keeping text alignment left for readability, but padding shifts the block.
             )}>

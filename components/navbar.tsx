@@ -77,7 +77,7 @@ export function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-         <div className="absolute top-24 left-4 right-4 bg-background/90 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-2xl p-4 flex flex-col space-y-2 md:hidden pointer-events-auto shadow-2xl animate-in slide-in-from-top-4 fade-in duration-300">
+         <div className="absolute top-20 left-4 right-4 bg-background/90 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-2xl p-4 flex flex-col space-y-2 md:hidden pointer-events-auto shadow-2xl animate-in slide-in-from-top-4 fade-in duration-300">
             {navItems.map((item) => (
                 <Button
                 key={item}

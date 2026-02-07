@@ -9,7 +9,7 @@ import { SkillsSection } from "@/components/skills-section"
 import { ProjectsSection } from "@/components/projects-section"
 import { ContactSection } from "@/components/contact-section"
 import { ExperienceTimeline } from "@/components/experience-timeline"
-import { Loader } from "@/components/loader"
+import { HeartbeatLoader } from "@/components/HeartbeatLoader"
 import { Footer } from "@/components/footer"
 
 // Lazy load the 3D Scene to improve initial load time
@@ -17,18 +17,18 @@ const CanvasScene = dynamic(() => import("@/components/CanvasScene"), { ssr: fal
 
 export default function Page() {
   const [loading, setLoading] = useState(true)
+  const [showContent, setShowContent] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 3000) // Loader displays for 3 seconds
-    return () => clearTimeout(timer)
-  }, [])
+  const handleLoaded = () => {
+    setLoading(false)
+    // Synchronize content fade-in with loader dissolve
+    setTimeout(() => setShowContent(true), 100)
+  }
 
   return (
     <>
-      {loading && <Loader />}
-      <div className={`min-h-screen bg-transparent text-foreground ${loading ? "hidden" : ""}`}>
+      {loading && <HeartbeatLoader onComplete={handleLoaded} />}
+      <div className={`min-h-screen bg-transparent text-foreground transition-opacity duration-1000 ${showContent ? "opacity-100" : "opacity-0"}`}>
         <CanvasScene />
         <Navbar />
         <main className="relative z-10 selection:bg-accent/30">
